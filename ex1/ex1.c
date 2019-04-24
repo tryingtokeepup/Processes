@@ -24,6 +24,8 @@ int main(void)
     }
     else
     {
+        wait(NULL);
+        // this waits until there are no child processes left to execute, and then it executes the below code
         x += 40;
         printf("hello, parent here, (pid: %d) of child %d, and x is %d\n", (int)getpid(), rc, x);
     }
