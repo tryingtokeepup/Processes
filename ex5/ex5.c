@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
-
+#include <string.h>
 #define MSGSIZE 16
 
 char *msg1 = "hello world #1";
@@ -17,16 +17,19 @@ char *msg3 = "hello world #3";
 int main(void)
 {
     // Your code here
+    char buf[128];
+    int fd[2];
+    pipe(fd);
+
     pid_t pid = fork();
     if (pid == 0)
     {
 
-        char buf[128];
-        int fd[2];
-        pipe(fd);
-        char *message_one = "Hello World!\n";
-        char *message_two = "My name is Kai!\n";
-        char *message_three = "And I like cookies!\n";
+        printf("Child process!\n");
+
+        write(fd[1], msg1, strlen(msg1));
+        write(fd[1], msg2, strlen(msg2));
+        write(fd[1], msg3, strlen(msg3));
 
         exit(3);
     }
@@ -35,7 +38,8 @@ int main(void)
         printf("Parent process!\n");
 
         wait(NULL);
-
+        int message_reader = read(fd[0], buf, sizeof buf);
+        write(STDOUT_FILENO, buf, message_reader);
         printf("Press RETURN to exit out of here!\n");
         getchar();
     }
