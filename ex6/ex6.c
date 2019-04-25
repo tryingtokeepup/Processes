@@ -22,12 +22,6 @@ and `clock_gettime()` should work just fine.
 #define number_iter 1000000
 #define BILLION 1000000000L
 
-int localpid(void)
-{
-    static int a[9] = {0};
-    return a[0];
-}
-
 int main(void)
 {
     uint64_t diff;
